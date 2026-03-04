@@ -6,9 +6,10 @@ import {
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
-import { FilesService } from './files.service';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { fileFilter } from './helpers/fileFilter.helper';
+import { diskStorage } from 'multer';
+import { FilesService } from './files.service';
+import { fileFilter, fileNamer } from './helpers';
 
 @Controller('files')
 export class FilesController {
@@ -18,6 +19,10 @@ export class FilesController {
   @UseInterceptors(
     FileInterceptor('file', {
       fileFilter: fileFilter,
+      storage: diskStorage({
+        destination: './static/products',
+        filename: fileNamer,
+      }),
     }),
   )
   uploadProductImage(
@@ -28,8 +33,10 @@ export class FilesController {
         'Invalid file type. Only images are allowed.',
       );
     }
+    const secureUrl = `${process.env.HOST_API}/files/product/${file.filename}`;
     return {
       fileName: file.originalname,
+      secureUrl,
     };
   }
 }
