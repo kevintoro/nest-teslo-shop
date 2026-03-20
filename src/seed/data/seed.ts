@@ -1,3 +1,5 @@
+import { SeedUser } from '../interfaces/seed-user.interface';
+
 interface SeedProduct {
   description: string;
   images: string[];
@@ -15,10 +17,20 @@ type ValidSizes = 'XS' | 'S' | 'M' | 'L' | 'XL' | 'XXL' | 'XXXL';
 type ValidTypes = 'shirts' | 'pants' | 'hoodies' | 'hats';
 
 interface SeedData {
+  users: SeedUser[];
   products: SeedProduct[];
 }
 
 export const initialData: SeedData = {
+  users: [
+    {
+      email: 'admin@example.com',
+      password: '123456',
+      fullName: 'Admin',
+      roles: ['admin'],
+      isActive: true,
+    },
+  ],
   products: [
     {
       description:

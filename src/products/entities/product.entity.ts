@@ -5,11 +5,14 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { ProductImage } from './product-image.entity';
+import { User } from 'src/auth/entities/user.entity';
 
 @Entity({
   name: 'products',
@@ -47,6 +50,10 @@ export class Product {
     eager: true,
   })
   images: ProductImage[];
+
+  @ManyToOne(() => User, (user) => user.products, { eager: true })
+  @JoinColumn({ name: 'user_id' })
+  user: User;
 
   @CreateDateColumn({
     type: 'timestamp',
